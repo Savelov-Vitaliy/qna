@@ -1,13 +1,6 @@
 class AnswersController < ApplicationController
-
-  def index
-    @answers = Answer.all
-  end
-
-  def show; end
-
-  def new
-  end
+  expose :answers, -> { Answer.all }
+  expose :answer
 
   def create
     @answer = Answer.new(answer_params)
@@ -20,12 +13,6 @@ class AnswersController < ApplicationController
   end
 
   private
-
-  def answer
-    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
-  end
-
-  helper_method :answer
 
   def answer_params
     params.require(:answer).permit(:question_id, :body)
