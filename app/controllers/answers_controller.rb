@@ -1,5 +1,4 @@
 class AnswersController < ApplicationController
-  before_action :load_answer, only: [:show]
 
   def index
     @answers = Answer.all
@@ -8,7 +7,6 @@ class AnswersController < ApplicationController
   def show; end
 
   def new
-    @answer = Answer.new
   end
 
   def create
@@ -23,9 +21,11 @@ class AnswersController < ApplicationController
 
   private
 
-  def load_answer
-    @answer = Answer.find(params[:id])
+  def answer
+    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
   end
+
+  helper_method :answer
 
   def answer_params
     params.require(:answer).permit(:question_id, :body)
