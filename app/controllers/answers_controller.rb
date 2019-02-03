@@ -1,9 +1,10 @@
 class AnswersController < ApplicationController
   expose :answers, -> { Answer.all }
   expose :answer
+  expose :question
 
   def create
-    @answer = Answer.new(answer_params)
+    @answer = question.answers.new(answer_params)
 
     if @answer.save
       redirect_to @answer.question
@@ -15,6 +16,6 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:question_id, :body)
+    params.require(:answer).permit(:body)
   end
 end
