@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  let(:user) { create(:user) }
+
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
@@ -9,7 +13,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question) }
-        expect(response).to redirect_to assigns(:question)
+        expect(response).to redirect_to assigns(:exposed_question)
       end
     end
 
