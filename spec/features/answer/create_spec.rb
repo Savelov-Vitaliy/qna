@@ -1,41 +1,36 @@
 require 'rails_helper'
 
-feature 'User can create question', %q{
-  In order to get answer from a community
-  As an authenticated user
-  I'd like to be able to ask the question
-} do
+feature 'User can write answer to the question.', '
+  The user,
+  being on the question page,
+  can write the answer to the question.
+' do
 
-  given(:user) {create(:user)}
+  given(:question) { create(:question) }
+  given(:current_user) { create(:user) }
+
+  scenario 'Unauthenticated user write answer' do
+    visit question_path(id: question.id)
+    fill_in 'answer_body', with: 'My answer to this question'
+    click_on 'Post answer'
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  end
 
   describe 'Authenticated user' do
     background do
-      sign_in(user)
-      visit questions_path
-      click_on 'Ask question'
+      sign_in(current_user)
+      visit question_path(id: question)
     end
 
-    scenario 'asks a question' do
-      fill_in 'Title', with: 'Test question'
-      fill_in 'Body', with: 'text text text'
-      click_on 'Ask'
-
-      expect(page).to have_content 'Your question successfully created.'
-      expect(page).to have_content 'Test question'
-      expect(page).to have_content 'text text text'
+    scenario 'write answer.' do
+      fill_in 'answer_body', with: 'My answer to this question'
+      click_on 'Post answer'
+      expect(page).to have_content 'My answer to this question'
     end
 
-    scenario 'asks a question with errors' do
-      click_on 'Ask'
-
-      expect(page).to have_content "can't be blank"
+    scenario 'write answer with errors.' do
+      click_on 'Post answer'
+      expect(page).to have_content 'Give your answer'
     end
-  end
-
-  scenario 'Unauthenticated user tries to ask a question' do
-    visit questions_path
-    click_on 'Ask question'
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 end

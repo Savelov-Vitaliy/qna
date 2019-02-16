@@ -1,17 +1,16 @@
 require 'rails_helper'
 
-feature 'User can create question', %q{
+feature 'Create question', "
   In order to get answer from a community
   As an authenticated user
   I'd like to be able to ask the question
-} do
+" do
 
-  given(:user) {create(:user)}
+  given(:current_user) { create(:user) }
 
   describe 'Authenticated user' do
     background do
-      sign_in(user)
-
+      sign_in(current_user)
       visit questions_path
       click_on 'Ask question'
     end
@@ -28,7 +27,6 @@ feature 'User can create question', %q{
 
     scenario 'asks a question with errors' do
       click_on 'Ask'
-
       expect(page).to have_content "Title can't be blank"
     end
   end
@@ -36,7 +34,6 @@ feature 'User can create question', %q{
   scenario 'Unauthenticated user tries to ask a question' do
     visit questions_path
     click_on 'Ask question'
-
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 end

@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-feature 'New user can sign up.', %q{
+feature 'New user can sign up.', '
   A new user can register
   to be able to ask questions
   or respond to others.
-} do
+' do
 
   given(:user) { build(:user) }
 
@@ -27,5 +27,4 @@ feature 'New user can sign up.', %q{
 
     expect(page).to have_content 'prohibited this user from being saved'
   end
-
 end

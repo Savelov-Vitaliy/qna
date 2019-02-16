@@ -11,9 +11,9 @@ html lang="en"
   body
 
     - if user_signed_in?
-        li= link_to "Sign out", destroy_user_session_path, method: :delete
+      sli= link_to "Sign out", destroy_user_session_path, method: :delete
     - else
-        li= link_to "Sign in", new_user_session_path
+      sli= link_to "Sign in", new_user_session_path
 
     p class=notice = notice
     p class=alert = alert

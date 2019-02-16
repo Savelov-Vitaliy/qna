@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 feature 'User can sign out.' do
-
   given(:user) { create(:user) }
 
   scenario 'Authorized user tries to sign out.' do
