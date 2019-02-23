@@ -2,12 +2,8 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   expose :questions, -> { Question.all }
   expose :question
-  # expose :answers, -> { question.answers }
-  # expose :answer #, parent: question
 
   def create
-    # question = current_user.questions.new(question_params)
-    # @answer = question.answers.new user: current_user
     question.author = current_user
     if question.save
       redirect_to question, notice: 'Your question successfully created.'
@@ -17,7 +13,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if question.author? current_user
+    if current_user.author?(question)
       question.destroy
       redirect_to questions_path
     else
@@ -33,7 +29,7 @@ class QuestionsController < ApplicationController
   end
 
   def answer
-    @answer ||= question.answers.new(user_id: current_user&.id)
+    @answer ||= question.answers.new(author: current_user)
   end
 
   helper_method :answer

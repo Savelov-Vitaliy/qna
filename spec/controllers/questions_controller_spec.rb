@@ -6,10 +6,10 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'Authenticated user.' do
     before { login(question.author) }
 
-    describe 'POST #create.' do
+    describe 'POST #create' do
       context 'with valid attributes' do
         it 'saves a new question in the database' do
-          expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+          expect { post :create, params: { question: attributes_for(:question) } }.to change(question.author.questions, :count).by(1)
         end
 
         it 'redirects to show view' do
@@ -33,13 +33,29 @@ RSpec.describe QuestionsController, type: :controller do
     describe 'DELETE #destroy' do
       let!(:question) { create(:question) }
 
-      it 'delete from the database' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      describe 'Authenticated user is author' do
+        it 'delete from the database' do
+          expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+        end
+
+        it 'redirects to index view' do
+          delete :destroy, params: { id: question }
+          expect(response).to redirect_to questions_path
+        end
       end
 
-      it 'redirects to index view' do
-        delete :destroy, params: { id: question }
-        expect(response).to redirect_to questions_path
+      describe 'Authenticated user is not author' do
+        let(:current_user) { create(:user) }
+        before { login(current_user) }
+
+        it 'delete from the database' do
+          expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+        end
+
+        it 'redirects to index view' do
+          delete :destroy, params: { id: question }
+          expect(response).to render_template :show
+        end
       end
     end
   end

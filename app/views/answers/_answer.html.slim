@@ -1,2 +1,4 @@
--answers.each do |answer|
-  li #{answer.id}) #{answer.body}
+li
+  = "#{answer.body} "
+  -if current_user&.author?(answer)
+    = link_to ' Delete answer ', answer_path(answer), method: :delete, data: { confirm: 'Delete this answer?', title: 'Delete answer' }

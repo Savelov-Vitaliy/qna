@@ -9,28 +9,29 @@ feature 'User can write answer to the question.', '
   given(:question) { create(:question) }
   given(:current_user) { create(:user) }
 
-  scenario 'Unauthenticated user write answer' do
-    visit question_path(id: question.id)
-    fill_in 'answer_body', with: 'My answer to this question'
-    click_on 'Post answer'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
-  end
-
   describe 'Authenticated user' do
     background do
       sign_in(current_user)
-      visit question_path(id: question)
+      visit question_path(question)
     end
 
-    scenario 'write answer.' do
+    scenario 'Post a answer.' do
       fill_in 'answer_body', with: 'My answer to this question'
       click_on 'Post answer'
       expect(page).to have_content 'My answer to this question'
     end
 
-    scenario 'write answer with errors.' do
+    scenario 'Post a answer with errors.' do
       click_on 'Post answer'
-      expect(page).to have_content 'Give your answer'
+      expect(page).to have_content "Body can't be blank"
     end
+  end
+
+  scenario 'Unauthenticated user tries post a answer' do
+    current_user
+    visit question_path(question)
+    fill_in 'answer_body', with: 'My answer to this question'
+    click_on 'Post answer'
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 end

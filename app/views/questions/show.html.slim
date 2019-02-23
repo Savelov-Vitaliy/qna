@@ -1,14 +1,13 @@
-= render 'shared/errors', resource: answer
-
 h1= question.title
 p= question.body
 
-= form_with model: question, method: :delete, local: true do |f|
-  = f.hidden_field id: question.id
-  = f.submit 'Delete question', data: { confirm: 'Delete this question?' }
+-if current_user&.author?(question)
+    = link_to 'Delete question', question_path(question), method: :delete, data: { confirm: 'Delete this question?' }
 
-/= link_to 'Delete question', question_path, method: :delete, data: { confirm: 'Delete this question?' }
+ul
+  = render question.answers
 
+= render 'shared/errors', resource: answer
 = form_with model: [question, answer], local: true do |f|
   = f.label :body, 'Give your answer:'
   = f.text_area :body

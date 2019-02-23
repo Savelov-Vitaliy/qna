@@ -11,22 +11,21 @@ feature 'Delete answer.', "
   describe 'Authenticated user' do
     scenario 'is the author' do
       sign_in(answer.author)
-      visit answer_path(id: answer)
+      visit question_path(answer.question)
+      expect(page).to have_content answer.body
       click_on 'Delete answer'
       expect(page).to have_no_content answer.body
     end
 
     scenario 'is not the author' do
       sign_in(user)
-      visit answer_path(id: answer)
-      click_on 'Delete answer'
-      expect(page).to have_content 'You don`t have permission to delete this answer.'
+      visit question_path(answer.question)
+      expect(page).not_to have_css('li', text: "#{answer.body} Delete answer")
     end
   end
 
   scenario 'Unauthenticated user' do
-    visit answer_path(id: answer)
-    click_on 'Delete answer'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    visit question_path(answer.question)
+    expect(page).not_to have_css('li', text: "#{answer.body} Delete answer")
   end
 end

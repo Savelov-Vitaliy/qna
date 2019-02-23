@@ -7,19 +7,20 @@ feature 'User can view questions and answers to it.', '
 
   given(:question) { create(:question) }
   given(:answers) { create_list(:answer, 3, question) }
-  given(:user) { create(:user) }
-
-  after do
-    visit question_answers_path(question_id: question)
-    expect(page).to have_content question.title
-    expect(page).to have_content question.body
-    question.answers.map { |answer| expect(page).to have_content answer.body }
-  end
+  given(:current_user) { create(:user) }
 
   scenario 'User view questions and answers' do
-    sign_in(user)
+    sign_in(current_user)
+    visit question_path(question)
+    expect(page).to have_content question.title
+    expect(page).to have_content question.body
+    question.answers.each { |answer| expect(page).to have_content answer.body }
   end
 
   scenario 'Unauthenticated user view questions and answers' do
+    visit question_path(question)
+    expect(page).to have_content question.title
+    expect(page).to have_content question.body
+    question.answers.each { |answer| expect(page).to have_content answer.body }
   end
 end

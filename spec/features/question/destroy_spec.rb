@@ -12,6 +12,7 @@ feature 'Delete question', "
     scenario 'is the author' do
       sign_in(question.author)
       visit question_path(id: question)
+      expect(page).to have_content question.title
       click_on 'Delete question'
       expect(page).to have_no_content question.title
     end
@@ -19,14 +20,12 @@ feature 'Delete question', "
     scenario 'is not the author' do
       sign_in(user)
       visit question_path(id: question)
-      click_on 'Delete question'
-      expect(page).to have_content 'You don`t have permission to delete this question.'
+      expect(page).to have_no_content 'Delete question'
     end
   end
 
   scenario 'Unauthenticated user' do
     visit question_path(id: question)
-    click_on 'Delete question'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to have_no_content 'Delete question'
   end
 end

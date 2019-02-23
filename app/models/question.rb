@@ -3,8 +3,4 @@ class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
 
   validates :title, :body, presence: true
-
-  def author?(user)
-    author == user
-  end
 end
