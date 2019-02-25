@@ -8,6 +8,6 @@ class User < ApplicationRecord
   has_many :answers
 
   def author_of?(obj)
-    id == obj.try(:user_id)
+    id == obj&.user_id
   end
 end
