@@ -1,0 +1,21 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    = csrf_meta_tags
+    = stylesheet_link_tag "application", :media => "all"
+    = javascript_include_tag "application"
+
+  body
+
+    - if user_signed_in?
+      sli= link_to "Sign out", destroy_user_session_path, method: :delete
+    - else
+      sli= link_to "Sign in", new_user_session_path
+
+    p class=notice = notice
+    p class=alert = alert
+
+    = yield

@@ -1,15 +1,24 @@
 class AnswersController < ApplicationController
-  expose :answers, -> { Answer.all }
+  before_action :authenticate_user!
   expose :answer
-  expose :question
+  expose :question, -> { @question ||= params[:question_id] ? Question.find(params[:question_id]) : answer.question }
 
   def create
-    @answer = question.answers.new(answer_params)
-
-    if @answer.save
-      redirect_to @answer.question
+    answer.question = question
+    answer.author = current_user
+    if answer.save
+      redirect_to question_path(answer.question)
     else
-      render :new
+      render 'questions/show'
+    end
+  end
+
+  def destroy
+    if current_user.author_of?(answer)
+      answer.destroy
+      redirect_to answer.question
+    else
+      redirect_to answer.question, notice: 'You don`t have permission to delete this answer.'
     end
   end
 
