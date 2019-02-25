@@ -8,7 +8,6 @@ class User < ApplicationRecord
   has_many :answers
 
   def author?(obj)
-    (questions.ids.include?(obj.id) & (obj.class == Question)) ||
-      (answers.ids.include?(obj.id) & (obj.class == Answer))
+    id == obj.try(:author)&.id
   end
 end

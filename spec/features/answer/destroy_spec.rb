@@ -20,12 +20,12 @@ feature 'Delete answer.', "
     scenario 'is not the author' do
       sign_in(user)
       visit question_path(answer.question)
-      expect(page).not_to have_css('li', text: "#{answer.body} Delete answer")
+      expect(page).to have_no_link('Delete answer', href: answer_path(answer))
     end
   end
 
   scenario 'Unauthenticated user' do
     visit question_path(answer.question)
-    expect(page).not_to have_css('li', text: "#{answer.body} Delete answer")
+    expect(page).to have_no_link('Delete answer', href: answer_path(answer))
   end
 end

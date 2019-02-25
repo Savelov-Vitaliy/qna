@@ -20,12 +20,12 @@ feature 'Delete question', "
     scenario 'is not the author' do
       sign_in(user)
       visit question_path(id: question)
-      expect(page).to have_no_content 'Delete question'
+      expect(page).to have_no_link 'Delete question'
     end
   end
 
   scenario 'Unauthenticated user' do
     visit question_path(id: question)
-    expect(page).to have_no_content 'Delete question'
+    expect(page).to have_no_link 'Delete question'
   end
 end
