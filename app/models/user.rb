@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :questions
   has_many :answers
 
-  def author?(obj)
-    id == obj.try(:author)&.id
+  def author_of?(obj)
+    id == obj.try(:user_id)
   end
 end

@@ -7,22 +7,13 @@ RSpec.describe User, type: :model do
   describe 'Is the author?' do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
-    let(:answer) { create(:answer) }
 
-    it 'is the questions author' do
-      expect(question.author.author?(question)).to eq true
+    it 'is the author' do
+      expect(question.author).to be_author_of(question)
     end
 
-    it 'isn`t the questions author' do
-      expect(user.author?(question)).to eq false
-    end
-
-    it 'is the answers author' do
-      expect(answer.author.author?(answer)).to eq true
-    end
-
-    it 'isn`t the answers author' do
-      expect(user.author?(answer)).to eq false
+    it 'isn`t the author' do
+      expect(user).to_not be_author_of(question)
     end
   end
 end
